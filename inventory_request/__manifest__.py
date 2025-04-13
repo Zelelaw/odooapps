@@ -12,6 +12,8 @@
     'sequence': 1,
     'website': 'https://zoometechet.com',
     'license': 'LGPL-3',
+    'price': '80.0',
+    'currency': 'USD',
     'images': ['static/description/assets.gif'],
     'data': [
         'security/security.xml',
