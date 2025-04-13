@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="tree_purchase_order_requisition" model="ir.ui.view">
+        <field name="name">purchase.order.requisition.tree</field>
+        <field name="model">purchase.order.requisition</field>
+        <field name="arch" type="xml">
+            <tree string="Purchase Order Requisition">
+                <field name="serial_number"/>
+                <field name="prepared_by"/>
+                <field name="team_leader_name"/>
+                <field name="client_name"/>
+                <field name="date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="purchase_order_requisition_form" model="ir.ui.view">
+        <field name="name">purchase.order.requisition.form</field>
+        <field name="model">purchase.order.requisition</field>
+        <field name="arch" type="xml">
+            <form string="Purchase Order Requisition">
+                <header>
+                    <button name="send_for_approval" string="Send for Approval" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="approved" string="Approve  as Manager" type="object"
+                            class="oe_highlight" invisible="state != 'waiting_approval'"
+                            groups="woodflex_request.group_production_manager"/>
+                    <button name="delivered" string="Delivered" type="object"
+                            class="oe_highlight" invisible="state != 'approved'"/>
+                    <button name="set_to_draft" string="Set to Draft" type="object"
+                            invisible="state != 'cancelled'"/>
+                    <button name="cancel" string="Cancel" type="object"
+                            invisible="state in ('approved','delivered', 'cancelled')"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="serial_number" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="prepared_by"
+                                   readonly="1"
+                                   help="A person who issue the Purchase Order Requisition"/>
+                            <field name="team_leader_name"/>
+                            <field name="section_name"/>
+                            <field name="for_project" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="company_id" options="{'no_create': True}"
+                                   readonly="1"/>
+                            <field name="date"/>
+                            <field name="approved_by" invisible="state == 'draft'"/>
+
+                        </group>
+                        <notebook>
+                            <page string="Purchased Item Detail">
+                                <field name="purchase_order_requisition_line" mode="form"
+                                       options="{'reload_whole_on_button': true}">
+                                    <tree editable="bottom">
+                                        <field name="item" required="1"/>
+                                        <field name="unit"/>
+                                        <field name="code"/>
+                                        <field name="quantity"/>
+                                        <field name="remark"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_purchase_order_requisition" model="ir.actions.act_window">
+        <field name="name">Purchase Order Requisition</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.order.requisition</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Purchase Order Requisition
+            </p>
+        </field>
+    </record>
+
+
+<!--    <menuitem id="menu_purchase_order_requisition"-->
+<!--              name="Purchase Order Requisition"-->
+<!--              parent="woodflex_request.menu_woodflex_requests"-->
+<!--              sequence="4"/>-->
+
+<!--    <menuitem id="submenu_purchase_order_requisition"-->
+<!--              name="New Purchase Order Request"-->
+<!--              parent="menu_purchase_order_requisition"-->
+<!--              action="action_purchase_order_requisition"/>-->
+</odoo>

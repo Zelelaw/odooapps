@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_project_detail">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <center>
+                            <h2>Project Details</h2>
+                        </center>
+                        <h3>Proforma Invoice</h3>
+                        <div class="row mt32 mb32" id="informations">
+                            <div t-if="doc.issued_by" class="col-auto mw-100 mb-2">
+                                <strong>Prepared By:</strong>
+                                <p class="m-0" t-field="doc.issued_by"/>
+                            </div>
+                        </div>
+                        Project Name:
+                        <p t-field="doc.project_name"/>
+                        Customer Name:
+                        <p t-field="doc.customer_name"/>
+                        Customer Site:
+                        <p t-field="doc.customer_site"/>
+                        Phone:
+                        <p t-field="doc.phone"/>
+                        Project State:
+                        <p t-field="doc.state"/>
+                        <br/>
+                        <center>
+                            <h2>Product Detail</h2>
+                        </center>
+                        <table class="table table-sm o_main_table">
+                            <thead>
+                                <tr>
+                                    <th name="th_item" class="text-left">Item</th>
+                                    <th name="th_material" class="text-right">Material</th>
+                                    <th name="th_unit" class="text-right">UoM</th>
+                                    <th name="th_color" class="text-right">Color</th>
+                                    <th name="th_size" class="text-right">Size</th>
+                                    <th name="th_unit_price" class="text-right">Unit Price</th>
+                                    <th name="th_quantity" class="text-right">Quantity</th>
+                                    <th name="th_amount" class="text-right">Amount</th>
+                                    <th name="th_remark" class="text-right">Remark</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.wood_flex_projects_lines" t-as="line">
+                                    <tr>
+                                        <td name="td_item">
+                                            <span t-field="line.item"/>
+                                        </td>
+                                        <td name="td_material" class="text-right">
+                                            <span t-field="line.material"/>
+                                        </td>
+                                        <td name="td_unit" class="text-right">
+                                            <span t-field="line.unit"/>
+                                        </td>
+                                        <td name="td_color" class="text-right">
+                                            <span t-field="line.color"/>
+                                        </td>
+                                        <td name="td_size" class="text-right">
+                                            <span t-field="line.size"/>
+                                        </td>
+                                        <td name="td_unit_price" class="text-right">
+                                            <span t-field="line.unit_price"/>
+                                        </td>
+                                        <td name="td_quantity" class="text-right">
+                                            <span t-field="line.quantity"/>
+                                        </td>
+                                        <td name="td_amount" class="text-right">
+                                            <span t-field="line.amount"/>
+                                        </td>
+                                        <td name="td_remark" class="text-right">
+                                            <span t-field="line.remark"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <center>
+                        <strong>Approved BY</strong>
+                        <br/>
+                        <br/>
+                        Name:_______________________________
+                        <br/>
+                        <br/>
+                        Sign:_______________________________
+                    </center>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

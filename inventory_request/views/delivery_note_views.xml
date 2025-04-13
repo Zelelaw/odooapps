@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="tree_delivery_note" model="ir.ui.view">
+        <field name="name">delivery.note.tree</field>
+        <field name="model">delivery.note</field>
+        <field name="arch" type="xml">
+            <tree string="Delivery Note">
+                <field name="serial_number"/>
+                <field name="prepared_by"/>
+                <field name="date"/>
+                <field name="company_id"/>
+                <field name="received_by"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="delivery_note_form" model="ir.ui.view">
+        <field name="name">delivery.note.form</field>
+        <field name="model">delivery.note</field>
+        <field name="arch" type="xml">
+            <form string="Delivery Note">
+                <header>
+                    <button name="send_for_approval" string="Send for Approval" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="approved" string="Approve  as Manager" type="object"
+                            class="oe_highlight" invisible="state != 'waiting_approval'"/>
+                    <button name="delivered" string="Delivered" type="object"
+                            class="oe_highlight" invisible="state != 'approved'"/>
+                    <button name="set_to_draft" string="Set to Draft" type="object"
+                            invisible="state != 'cancelled'"/>
+                    <button name="cancel" string="Cancel" type="object"
+                            invisible="state in ('approved','delivered', 'cancelled')"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="serial_number" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="prepared_by" string="Prepared By"
+                                   readonly="1"
+                                   help="A person who issue the Delivery Note"/>
+                            <field name="received_by" string="M/S"/>
+                            <field name="for_project" options="{'no_create': True}"/>
+                            <field name="sign"/>
+                        </group>
+                        <group>
+                            <field name="date" string="Order Date"/>
+                            <field name="company_id" options="{'no_create': True}"
+                                   readonly="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Purchased Item Detail">
+                                <field name="delivery_note_line" mode="tree"
+                                       options="{'reload_whole_on_button': true}">
+                                    <tree editable="bottom">
+                                        <field name="item" required="1"/>
+                                        <field name="quantity"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_delivery_note" model="ir.actions.act_window">
+        <field name="name">Delivery Note</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">delivery.note</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Delivery Note
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="menu_delivery_note"
+              name="Delivery Note"
+              parent="woodflex_request.menu_woodflex_requests"
+              action="action_delivery_note"
+              groups="woodflex_request.group_store_man,woodflex_request.group_finance_officer,woodflex_request.group_production_manager,woodflex_request.group_general_manager"
+              sequence="4"/>
+
+    <!--    <menuitem id="submenu_delivery_note"-->
+    <!--              name="New Request"-->
+    <!--              parent="menu_delivery_note"-->
+    <!--              action="action_delivery_note"/>-->
+</odoo>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="tree_local_purchase_order" model="ir.ui.view">
+        <field name="name">local.purchase.order.tree</field>
+        <field name="model">local.purchase.order</field>
+        <field name="arch" type="xml">
+            <tree string="Local Purchase Order">
+                <field name="LPO_Number"/>
+                <field name="issued_by"/>
+                <field name="order_date"/>
+                <field name="for_project"/>
+                <field name="payed_amount"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="local_purchase_order_form" model="ir.ui.view">
+        <field name="name">local.purchase.order.form</field>
+        <field name="model">local.purchase.order</field>
+        <field name="arch" type="xml">
+            <form string="Local Purchase Order">
+                <header>
+                    <button name="send_for_manager_approval" string="Send for Purchaser" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+
+                    <button name="send_for_purchaser_approval" string="Approve  as Purchaser"
+                            groups="woodflex_request.group_purchaser" type="object"
+                            class="oe_highlight" invisible="state != 'purchaser'"/>
+
+                    <button name="send_for_accountant_approval" string="Approve  as CFO" type="object"
+                            class="oe_highlight" groups="woodflex_request.group_finance_officer"
+                            invisible="state != 'account'"/>
+
+                    <button name="confirm" string="Approve  as Manager" type="object"
+                            class="oe_highlight" groups="woodflex_request.group_production_manager"
+                            invisible="state != 'manager'"/>
+
+                    <button name="purchased" string="Item Purchased" type="object"
+                            class="oe_highlight" groups="woodflex_request.group_purchaser"
+                            invisible="state != 'confirmed'"/>
+
+                    <button name="set_to_draft" string="Set to Draft" type="object"
+                            invisible="state != 'cancelled'"/>
+
+                    <button name="cancel" string="Cancel" type="object"
+                            groups="woodflex_request.group_purchaser"
+                            invisible="state not in ('purchaser')"/>
+
+                    <button name="cancel" string="Cancel" type="object"
+                            groups="woodflex_request.group_finance_officer"
+                            invisible="state not in ('account', 'cancelled')"/>
+
+                    <button name="cancel" string="Cancel" type="object"
+                            groups="woodflex_request.group_production_manager"
+                            invisible="state not in ('manager', 'cancelled')"/>
+
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="LPO_Number" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="issued_by" string="Issued By"
+                                   readonly="1"
+                                   help="A person who issue the local purchase order"/>
+                            <field name="for_project" options="{'no_create': True}"
+                                   readonly="state in ('confirmed','purchased')"/>
+                        </group>
+                        <group>
+                            <field name="order_date" string="Order Date" readonly="true"/>
+                            <field name="company_id" options="{'no_create': True}"
+                                   readonly="1"/>
+                            <field name="payed_amount" string="Payed Amount"
+                                   readonly="state not in ('account')"/>
+                        </group>
+                        <notebook>
+                            <page string="Purchased Item Detail">
+                                <field name="local_purchase_order_line" mode="tree"
+                                       options="{'reload_whole_on_button': true}"
+                                       readonly="state in ('confirmed','purchased')">
+                                    <tree editable="bottom">
+                                        <field name="item" required="1"/>
+                                        <field name="unit" readonly="true"/>
+                                        <field name="quantity" required="1"/>
+                                        <field name="rate"/>
+                                        <field name="amount"/>
+                                        <field name="supplier_list"/>
+                                        <field name="remark"/>
+                                    </tree>
+                                </field>
+                                <group col="12" class="oe_invoice_lines_tab">
+                                    <group colspan="8">
+                                        <field name="narration" placeholder="Terms and Conditions" colspan="2"
+                                               nolabel="1"/>
+                                    </group>
+                                    <group colspan="4">
+                                        <group class="oe_subtotal_footer">
+                                            <field name="include_vat"/>
+                                            <field name="sub_total" readonly="1"/>
+                                            <field name="vat" readonly="1"/>
+                                            <field name="total" readonly="1"/>
+                                        </group>
+                                    </group>
+                                </group>
+                                <group>
+                                    <field name="amount_in_word"
+                                           class="oe_invoice_outstanding_credits_debits"
+                                           string="Amount in Word" readonly="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_local_purchase_order" model="ir.actions.act_window">
+        <field name="name">Local Purchase Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">local.purchase.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Local Purchase Order
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="menu_woodflex_requests"
+              name="Wood Flex Requests"
+              web_icon="woodflex_request,static/description/icon.png"
+              sequence="10"/>
+
+    <menuitem id="menu_local_purchase_order"
+              name="Local Purchase Order"
+              parent="menu_woodflex_requests"
+              action="action_local_purchase_order"
+              sequence="2"/>
+
+</odoo>

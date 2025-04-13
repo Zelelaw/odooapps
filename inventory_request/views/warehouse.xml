@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="product_template_inherit" model="ir.ui.view">
+        <field name="name">product.template.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <field name="barcode" position="after">
+                <field name="product_model"/>
+                <field name="product_serial"/>
+                <field name="store"/>
+            </field>
+        </field>
+    </record>
+<!--    <record id="vendor_bill_inherit" model="ir.ui.view">-->
+<!--        <field name="name">vendor.bill.inherit</field>-->
+<!--        <field name="model">account.move</field>-->
+<!--        <field name="inherit_id" ref="account.view_move_form"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <field name="partner_shipping_id" position="before">-->
+<!--                <field name="bank_account"/>-->
+<!--                <field name="check_number"/>-->
+<!--            </field>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    <record id="salary_info_inherit" model="ir.ui.view">-->
+<!--        <field name="name">salary.info.inherit</field>-->
+<!--        <field name="model">hr.contract</field>-->
+<!--        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <field name="other_allowance" position="after">-->
+<!--                <field name="responsibility_allowance"/>-->
+<!--                <field name="perdiem_allowance"/>-->
+<!--                <field name="overtime_allowance"/>-->
+<!--                <field name="desert_allowance"/>-->
+<!--                <field name="project_allowance"/>-->
+<!--            </field>-->
+<!--        </field>-->
+<!--    </record>-->
+
+</odoo>

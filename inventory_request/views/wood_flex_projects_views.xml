@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="tree_wood_flex_projects" model="ir.ui.view">
+        <field name="name">wood.flex.projects.tree</field>
+        <field name="model">wood.flex.projects</field>
+        <field name="arch" type="xml">
+            <tree string="Wood Flex Projects">
+                <field name="project_id"/>
+                <field name="issued_by"/>
+                <field name="project_name"/>
+                <field name="customer_name"/>
+                <field name="customer_site"/>
+                <field name="contractual_date"/>
+                <field name="phone"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="wood_flex_projects_form" model="ir.ui.view">
+        <field name="name">wood.flex.projects.form</field>
+        <field name="model">wood.flex.projects</field>
+        <field name="arch" type="xml">
+            <form string="Wood Flex Projects">
+                <header>
+                    <button name="initialize" string="Initialize Project" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+
+                    <button name="contract_signed" string="Sign Contract" type="object"
+                            class="oe_highlight" groups="woodflex_request.group_finance_officer"
+                            invisible="state != 'initialize'"/>
+
+                    <button name="project_completed" string="Project Completed" type="object"
+                            class="oe_highlight" groups="woodflex_request.group_production_manager"
+                            invisible="state != 'contract_signed'"/>
+
+                    <button name="payment_completed" string="Payment Completed" type="object"
+                            class="oe_highlight" groups="woodflex_request.group_finance_officer"
+                            invisible="state != 'pro_completed'"/>
+
+                    <button name="set_to_draft" string="Set to Draft" type="object"
+                            invisible="state != 'cancelled'"/>
+
+                    <button name="cancel" string="Cancel" type="object"
+                            groups="woodflex_request.group_finance_officer"
+                            invisible="state != 'initialize'"/>
+
+                    <button name="cancel" string="Cancel" type="object"
+                            invisible="state not in ('contract_signed', 'cancelled')"/>
+
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="project_id" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="issued_by" string="Created By"
+                                   readonly="1"
+                                   help="A person who issue the Wood Flex Projects"/>
+                            <field name="project_name" readonly="state in 'pay_completed'"/>
+                            <field name="customer_name" readonly="state in 'pay_completed'"/>
+                            <field name="customer_site" readonly="state in 'pay_completed'"/>
+                            <field name="phone" readonly="state in 'pay_completed'"/>
+                            <field name="email" readonly="state in 'pay_completed'"/>
+                        </group>
+                        <group>
+                            <field name="contractual_amount" readonly="state in 'pay_completed'"/>
+                            <field name="advance_amount" placeholder="Minimum 30% of Contractual Amount"
+                                   readonly="state in 'pay_completed'"/>
+                            <field name="remaining_amount" readonly="true" store="true"/>
+                            <field name="contractual_date" readonly="true"
+                                   options="{'min_date': '0d'}"/>
+                            <field name="contractual_end_date" readonly="state in 'pay_completed'"/>
+
+                            <field name="company_id" options="{'no_create': True}"
+                                   readonly="1"/>
+                            <field name="photo" widget="image" class="oe_avatar" readonly="state in 'pay_completed'"/>
+                            <field name="design" widget="many2many_binary"
+                                   class="oe_inline" readonly="state in 'pay_completed'"/>
+                        </group>
+                        <notebook>
+                            <page string="Projects Item Detail">
+                                <field name="wood_flex_projects_lines" mode="tree"
+                                       options="{'reload_whole_on_button': true}">
+                                    <tree editable="bottom">
+                                        <field name="items" required="1"/>
+                                        <field name="quantity"/>
+                                        <field name="remark"/>
+                                    </tree>
+                                </field>
+                                <group col="12" class="oe_invoice_lines_tab" invisible="true">
+                                    <group colspan="8">
+                                        <field name="terms_and_conditions" placeholder="Terms and Conditions"
+                                               colspan="2"
+                                               nolabel="1"/>
+                                    </group>
+                                    <group colspan="4">
+                                        <group class="oe_subtotal_footer">
+                                            <field name="include_vat"/>
+                                            <field name="sub_total"
+                                                   readonly="1"/>
+                                            <field name="vat" readonly="1"/>
+                                            <field name="price_allowance" widget="percentage"/>
+                                            <field name="delivery_fixing" widget="percentage"/>
+                                            <field name="discount" widget="percentage"/>
+                                            <field name="total" readonly="1"/>
+                                        </group>
+                                    </group>
+                                </group>
+                                <group>
+                                    <field name="amount_in_word" invisible="true"
+                                           class="oe_invoice_outstanding_credits_debits"
+                                           string="Amount in Word" readonly="1"/>
+                                </group>
+                            </page>
+                            <page string="Project Summary">
+                                <field name="wood_flex_projects_summary_lines" mode="tree"
+                                       options="{'reload_whole_on_button': true}">
+                                    <tree editable="bottom">
+                                        <field name="item" required="1"/>
+                                        <field name="material"/>
+                                        <field name="quantity"/>
+                                        <field name="amount" readonly="1"/>
+                                        <field name="remark"/>
+                                    </tree>
+                                </field>
+                                <group col="12" class="oe_invoice_lines_tab">
+                                    <group colspan="8">
+                                        <field name="terms_and_conditions" placeholder="Terms and Conditions"
+                                               colspan="2"
+                                               nolabel="1"/>
+                                    </group>
+                                    <group colspan="4">
+                                        <group class="oe_subtotal_footer">
+                                            <field name="sub_total"
+                                                   readonly="1"/>
+                                            <field name="vat" readonly="1"/>
+                                            <field name="price_allowance" widget="percentage"/>
+                                            <field name="delivery_fixing" widget="percentage"/>
+                                            <field name="discount" widget="percentage"/>
+                                            <field name="total" readonly="1"/>
+                                        </group>
+                                    </group>
+                                </group>
+                                <group>
+                                    <field name="amount_in_word"
+                                           class="oe_invoice_outstanding_credits_debits"
+                                           string="Amount in Word" readonly="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wood_flex_projects" model="ir.actions.act_window">
+        <field name="name">Wood Flex Projects</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wood.flex.projects</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Wood Flex Projects
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_wood_flex_projects"
+              name="Wood Flex Projects"
+              parent="woodflex_request.menu_woodflex_requests"
+              sequence="1"
+              action="action_wood_flex_projects"/>
+
+    <!--    <menuitem id="submenu_wood_flex_projects"-->
+    <!--              name="New Project"-->
+    <!--              parent="menu_wood_flex_projects"-->
+    <!--              action="action_wood_flex_projects"/>-->
+</odoo>

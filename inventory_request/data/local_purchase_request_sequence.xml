@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="sequence_local_purchase_order" model="ir.sequence">
+            <field name="name">Local Purchase Order</field>
+            <field name="code">local.purchase.order.sequence</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="sequence_receipt" model="ir.sequence">
+            <field name="name">Wood Flex Receipt</field>
+            <field name="code">woodfelx.receipt.sequence</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="sequence_payment_voucher" model="ir.sequence">
+            <field name="name">Wood Flex Payment Voucher</field>
+            <field name="code">payment.voucher.sequence</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="sequence_delivery_note" model="ir.sequence">
+            <field name="name">Delivery Note</field>
+            <field name="code">delivery.note.sequence</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="sequence_store_issue_voucher" model="ir.sequence">
+            <field name="name">Store Issue Voucher</field>
+            <field name="code">store.issue.voucher.sequence</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="sequence_good_receiving_note" model="ir.sequence">
+            <field name="name">Good Receiving Note</field>
+            <field name="code">good.receiving.note.sequence</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="sequence_material_requisition_note" model="ir.sequence">
+            <field name="name">Material Requisition Note</field>
+            <field name="code">material.requisition.note.sequence</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="sequence_wood_flex_projects" model="ir.sequence">
+            <field name="name">Wood Flex Projects</field>
+            <field name="code">wood.flex.projects.sequence</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>
